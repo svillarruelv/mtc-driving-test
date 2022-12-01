@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pregunta } from 'interface/pregunta';
+import { Pregunta } from 'interface/Pregunta';
 import data from 'db/balotario.json';
 
 const getQuestion = (index: number): Pregunta => data.preguntas[index];
