@@ -1,0 +1,21 @@
+.radio .radio-label {
+    @apply border-2;
+    @apply border-stone-500;
+    @apply text-stone-500
+}
+
+.radio .radio-label:has(input:checked) {
+    @apply border-2;
+    @apply border-blue-700;
+    @apply bg-blue-700;
+    @apply text-white;
+}
+
+//className='border-2 border-blue-700 text-blue-700 px-3 py-2 rounded-lg'
+.btn {
+    @apply border-2;
+    @apply border-blue-700;
+    @apply px-3;
+    @apply py-2;
+    @apply rounded-lg;
+}
