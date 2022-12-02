@@ -4,10 +4,37 @@
     @apply text-stone-500
 }
 
+.radio .radio-label-wrong {
+    @apply border-2;
+    @apply border-red-700;
+    @apply text-red-500
+}
+
+.radio .radio-label-right {
+    @apply border-2;
+    @apply border-green-700;
+    @apply text-green-700
+}
+
+
 .radio .radio-label:has(input:checked) {
     @apply border-2;
     @apply border-blue-700;
-    @apply bg-blue-700;
+    @apply bg-blue-600;
+    @apply text-white;
+}
+
+.radio .radio-label-wrong:has(input:checked) {
+    @apply border-2;
+    @apply border-red-700;
+    @apply bg-red-500;
+    @apply text-white;
+}
+
+.radio .radio-label-right:has(input:checked) {
+    @apply border-2;
+    @apply border-green-700;
+    @apply bg-green-500;
     @apply text-white;
 }
 
@@ -18,4 +45,10 @@
     @apply px-3;
     @apply py-2;
     @apply rounded-lg;
+}
+
+.btn:disabled{
+    @apply border-stone-300;
+    @apply bg-stone-300;
+    @apply text-white
 }
