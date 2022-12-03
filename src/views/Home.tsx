@@ -61,9 +61,11 @@ const Home = () => {
       <div className='card-container p-4'>
         <h2 className='font-bold text-3xl mb-2'>Pregunta {card.id}</h2>
         <p className='mb-4'>{card.desc}</p>
-        {card.}
+
+        {card.imgSrc && (<div className='flex items-center justify-center mb-4'><img src={card.imgSrc} alt='pregunta_imagen'/></div>)}
+
         <ul onChange={handleSelect} className='flex flex-col gap-4 mb-4'>
-          {card.opciones.map((opcion, index) => (
+          {card.opciones.map((opcion: string, index: number) => (
             <li
               className={`radio flex items-center gap-4 rounded-lg pr-2 
               ${getOptionStyle(index + 1)}`}
@@ -84,7 +86,7 @@ const Home = () => {
         </ul>
 
         {/* <button type='button' onClick={() => handleBack()}>RETROCEDER</button> */}
-        <div className='flex gap-4'>
+        <div className='flex gap-4 justify-center'>
           <button type='button' className='btn text-blue-700' onClick={() => handleCheck()}>
             COMPROBAR
           </button>
