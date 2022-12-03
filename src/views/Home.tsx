@@ -1,69 +1,105 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import { Pregunta } from 'interface/Pregunta';
 import data from 'db/balotario.json';
+import 'styles/home.scss';
 
 const getQuestion = (index: number): Pregunta => data.preguntas[index];
 
 const Home = () => {
   const [card, setCard] = useState<Pregunta>(getQuestion(0));
-  const [selected, setSelected] = useState<number>(-1);
-  const [isWrong, setIsWrong] = useState<boolean>(false);
-  
-  const handleSelect = (e: any) => {setSelected(parseInt(e.target.value,10))}
+  const [selected, setSelected] = useState<number>(0);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [score, setScore] = useState<number[]>([0,0]);
 
-  const handleBack = () => {
-    const currentIndex = parseInt(card.id, 10) - 1;
-    if (currentIndex === 0) return;
+  const handleSelect = (e: any) => {
+    setSelected(parseInt(e.target.value, 10));
+  };
 
-    const question = getQuestion(currentIndex - 1)
-    setCard(question)
+  const handleCheck = () => 
+  {
+    const newScore = score.slice();
+
+    if(selected === card.rpta) newScore[0] += 1 
+    else newScore[1] += 1 
+
+    setScore(newScore)
+
+    setIsChecked(true);
   }
-  const handleSubmit = (value: any) => {
-    if (value !== card.rpta) {
-      setIsWrong(true);
-      return;
+
+  const handleSubmit = () => {
+    const currentIndex = parseInt(card.id, 10) - 1;
+    const question = getQuestion(currentIndex + 1);
+    setCard(question);
+    setSelected(0);
+    setIsChecked(false);
+  };
+
+  const getOptionStyle = (value: number): string => {
+    let style = '';
+    if (isChecked) {
+      if (selected === value && selected !== card.rpta) style = 'bg-red-200';
+
+      if (value === card.rpta) style += 'bg-green-200';
     }
-    setIsWrong(false);
-    const currentIndex = parseInt(card.id, 10) - 1;
-    const question = getQuestion(currentIndex + 1)
-    setCard(question)
-    setSelected(-1)
+    return style;
+  };
 
-    
-  }
+  const getRadioStyle = (value: number): string => {
+    let style = '';
+    if (isChecked) {
+      if (selected === value && selected !== card.rpta) style = '-wrong';
 
-  useEffect(() => {
-    
-    const inputs = Array.from(document.querySelectorAll('input'));
-
-    const selectedInput = inputs.filter((e) => e.checked)[0]
-  
-    setSelected(parseInt(selectedInput.value,10))
-
-  }, [card])
-  
+      if (value === card.rpta) style += '-right';
+    }
+    return style;
+  };
 
   return (
-    <>
-      <h2>Pregunta {card.id}</h2>
-      <p>{card.desc}</p>
+    <div className='w-ful h-1/2 flex flex-col items-center justify-center'>
+      <div className='mt-4'>Correctas: {score[0]} | Incorrectas: {score[1]}</div>
+      <div className='card-container p-4'>
+        <h2 className='font-bold text-3xl mb-2'>Pregunta {card.id}</h2>
+        <p className='mb-4'>{card.desc}</p>
+        {card.}
+        <ul onChange={handleSelect} className='flex flex-col gap-4 mb-4'>
+          {card.opciones.map((opcion, index) => (
+            <li
+              className={`radio flex items-center gap-4 rounded-lg pr-2 
+              ${getOptionStyle(index + 1)}`}
+              key={opcion}
+            >
+              <label
+                htmlFor={opcion}
+                className={`radio-label${getRadioStyle(
+                  index + 1,
+                )} px-2 py-1 rounded-lg flex justify-center items-center text-xl lg:text-xl font-bold`}
+              >
+                <input value={index + 1} type='radio' hidden id={opcion} name='opciones' disabled={isChecked}/>
+                {opcion.substring(0, 1).toUpperCase()}
+              </label>
+              <label htmlFor={opcion}>{opcion.substring(2)}</label>
+            </li>
+          ))}
+        </ul>
 
-      <ul onChange={handleSelect}>
-        {card.opciones.map((opcion, index) => (
-          <li>
-            <label htmlFor={opcion}>
-              <input value={index+1} type='radio' id={opcion} name='opciones'/>
-              {opcion.substring(2)}
-            </label>
-          </li>
-        ))}
-      </ul>
-      
-      {isWrong && <p>ESTAS EQUIVOCADO</p>}
+        {/* <button type='button' onClick={() => handleBack()}>RETROCEDER</button> */}
+        <div className='flex gap-4'>
+          <button type='button' className='btn text-blue-700' onClick={() => handleCheck()}>
+            COMPROBAR
+          </button>
 
-      <button type='button' onClick={() => handleBack()}>RETROCEDER</button>
-      <button type='button' onClick={() => handleSubmit(selected)}>CONTINUAR</button>
-    </>
+          <button
+            type='button'
+            className='btn text-white bg-blue-700'
+            onClick={() => handleSubmit()}
+            disabled={!isChecked}
+          >
+            CONTINUAR
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
