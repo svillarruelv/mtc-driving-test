@@ -3,4 +3,5 @@ export interface Pregunta {
     desc: string;
     opciones: string[];
     rpta: number;
+    imgSrc?: string;
   }
