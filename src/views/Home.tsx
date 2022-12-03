@@ -17,6 +17,8 @@ const Home = () => {
 
   const handleCheck = () => 
   {
+    if (isChecked) return;
+
     const newScore = score.slice();
 
     if(selected === card.rpta) newScore[0] += 1 
@@ -87,7 +89,7 @@ const Home = () => {
 
         {/* <button type='button' onClick={() => handleBack()}>RETROCEDER</button> */}
         <div className='flex gap-4 justify-center'>
-          <button type='button' className='btn text-blue-700' onClick={() => handleCheck()}>
+          <button type='button' className='btn text-blue-700' onClick={() => handleCheck()} disabled={isChecked}>
             COMPROBAR
           </button>
 
